@@ -1,0 +1,62 @@
+#!/bin/sh
+# chkconfig: 2345 20 80
+# description: Description comes here....
+
+# Source function library.
+
+platfrom=$(uname)
+
+
+update()
+{
+    # code to start app comes here 
+    # example: daemon program_name &
+
+    if [ $platfrom == "Darwin" ]; then
+      cd /
+      port selfupdate
+    fi
+}
+
+upgrade()
+{
+    if [ $platfrom == "Darwin" ]; then
+      cd /
+      port clean outdated
+      port upgrade outdated
+      port -u uninstall
+
+      softwareupdate -i -a
+    fi
+    # code to stop app comes here 
+    # example: killproc program_name
+}
+
+help() {
+  echo "nope"
+}
+
+case "$1" in 
+    update)
+      update
+      ;;
+    upgrade)
+      update
+      upgrade
+      ;;
+    restart)
+      stop
+      start
+      ;;
+    status)
+      # code to check status of app comes here 
+      # example: status program_name
+      ;;
+    help)
+      help
+      ;;
+    *)
+       echo "Usage: $0 {update|upgrade}"
+esac
+
+exit 0 
